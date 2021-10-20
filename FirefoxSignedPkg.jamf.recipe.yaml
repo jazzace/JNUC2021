@@ -1,0 +1,34 @@
+Description: |
+  This recipe downloads the signed Firefox installer package from Mozilla,
+  uploads the pkg to your Jamf Pro Server/Distribution Point using variables
+  set in the environment, and then updates the policy if a new pkg is uploaded.
+  The grahampugh-recipes repo is required. 
+Identifier: com.github.jazzace.jamf.FirefoxSignedPkg
+ParentRecipe: com.github.autopkg.download.FirefoxSignedPkg
+MinimumVersion: '2.3'
+
+Input:
+  NAME: Firefox
+  CATEGORY: Testing
+  POLICY_CATEGORY: Testing
+  POLICY_NAME: "Install Latest %NAME%"
+  POLICY_TEMPLATE: All-Computers-Policy-Template.xml
+
+Process:
+- Processor: com.github.grahampugh.jamf-upload.processors/JamfCategoryUploader
+  Arguments:
+    category_name: "%CATEGORY%"
+
+- Processor: com.github.grahampugh.jamf-upload.processors/JamfPackageUploader
+  Arguments:
+    pkg_category: "%CATEGORY%"
+
+- Processor: StopProcessingIf
+  Arguments:
+    predicate: "pkg_uploaded == False"
+
+- Processor: com.github.grahampugh.jamf-upload.processors/JamfPolicyUploader
+  Arguments:
+    policy_name: "%POLICY_NAME%"
+    policy_template: "%POLICY_TEMPLATE%"
+    replace_policy: "True"

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Description</key>
+    <string>This recipe downloads the signed installer package from Mozilla 
+and then uploads the pkg to your Jamf Pro Server/Distribution Point using 
+variables set in the environment.
+The grahampugh-recipes repo is required. 
+</string>
+    <key>Identifier</key>
+    <string>com.github.jazzace.jamf.FirefoxSignedPkg-pkg-upload</string>
+    <key>Input</key>
+    <dict>
+        <key>CATEGORY</key>
+        <string>Browsers</string>
+    </dict>
+    <key>MinimumVersion</key>
+    <string>2.0</string>
+    <key>ParentRecipe</key>
+    <string>com.github.autopkg.download.FirefoxSignedPkg</string>
+    <key>Process</key>
+    <array>
+        <dict>
+            <key>Processor</key>
+            <string>com.github.grahampugh.jamf-upload.processors/JamfCategoryUploader</string>
+            <key>Arguments</key>
+            <dict>
+                <key>category</key>
+                <string>%CATEGORY%</string>
+            </dict>
+        </dict>
+        <dict>
+            <key>Processor</key>
+            <string>com.github.grahampugh.jamf-upload.processors/JamfPackageUploader</string>
+            <key>Arguments</key>
+            <dict>
+                <key>pkg_category</key>
+                <string>%CATEGORY%</string>
+            </dict>
+        </dict>
+    </array>
+</dict>

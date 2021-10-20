@@ -1,0 +1,20 @@
+Description: |
+  This recipe downloads the signed installer package from Mozilla and then
+  uploads the pkg to your Jamf Pro Server/Distribution Point using variables
+  set in the environment.
+  The grahampugh-recipes repo is required. 
+Identifier: com.github.jazzace.jamf.FirefoxSignedPkg-pkg-upload
+ParentRecipe: com.github.autopkg.download.FirefoxSignedPkg
+MinimumVersion: '2.3'
+
+Input:
+  CATEGORY: Browsers
+
+Process:
+- Processor: com.github.grahampugh.jamf-upload.processors/JamfCategoryUploader
+  Arguments:
+    category_name: '%CATEGORY%'
+
+- Processor: com.github.grahampugh.jamf-upload.processors/JamfPackageUploader
+  Arguments:
+    pkg_category: '%CATEGORY%'
